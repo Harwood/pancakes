@@ -57,17 +57,26 @@ class Database:
 
 class Tweet:
 	def __init__(self,tweet):
-		self.id, self.name, self.username, self.text = get_tweet_info(i)
+		self.id = tweet[0]
+		self.name = tweet[1]
+		self.username = tweet[2]
+		self.text = tweet[3]
+		self.tweet = tweet
 
+	def get_original_tweet_info(self):
+		return self.tweet
 
-	def get_tweet_info(tweet):
+	def get_info(self):
 		return self.id, self.name, self.username, self.text
 
 def print_results(results):
 	for i in results:
 		print(i)
-		id, name, username, text = get_tweet_info(i)
-		print(id		print(name)
+		
+		tweet = Tweet(i)
+		id, name, username, text = tweet.get_info()
+		print(id)
+		print(name)
 		print(username)
 		print(text)
 		print
