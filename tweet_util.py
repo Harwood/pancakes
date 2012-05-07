@@ -69,6 +69,12 @@ class Tweet:
 	def get_info(self):
 		return self.id, self.name, self.username, self.text
 
+def create_tweet_array(tmp):
+	array = []
+	for t in tmp:
+		array.append(Tweet(t))
+	return array
+
 def print_results(results):
 	for i in results:
 		print(i)
@@ -80,3 +86,30 @@ def print_results(results):
 		print(username)
 		print(text)
 		print
+
+# Connects to databases
+def db_connect(db,table,column):
+	data = tweet_util.Database(db,table,column)
+
+	return data.get_list()
+
+def get_results(db,query):
+	conn = sqlite3.connect(db)
+	curr = conn.cursor()
+
+	result = curr.execute(query)
+	try:
+		rows=[]
+		for t in result:
+			rows.append(t)
+	except Exception as err:
+		print("Error printing results: ")
+		print(str(err))
+		sys.exit()
+
+	curr.close()
+	conn.close()
+
+
+	return rows
+

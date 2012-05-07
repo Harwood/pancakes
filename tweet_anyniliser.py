@@ -21,31 +21,6 @@ def arg_handling():
 
 	return args.tweets_db[0],  args.pos_neg_table[0], args.sides_table[0]
 
-# Connects to databases
-def db_connect(db,table,column):
-	data = tweet_util.Database(db,table,column)
-
-	return data.get_list()
-
-def get_results(db,query):
-	conn = sqlite3.connect(db)
-	curr = conn.cursor()
-
-	result = curr.execute(query)
-	try:
-		rows=[]
-		for t in result:
-			rows.append(t)
-	except Exception as err:
-		print("Error printing results: ")
-		print(str(err))
-		sys.exit()
-
-	curr.close()
-	conn.close()
-
-
-	return rows
 
 
 # Checks if word exists
@@ -62,12 +37,15 @@ def test_db(db):
 	return get_results(db,'select * from tweet')
 
 
+
 # Main driver
 def main():
 	tweets_db, pos_neg_table, sides_table = arg_handling()
 
+	tweet_util.create_tweet_array(tweet_util.get_results(tweets_db,'select * from tweet order by user'))	
+	tweet_util.print_results(tweet_util.get_results(tweets_db,'select * from tweet order by user'))
 
-	tweet_util.print_results(get_results(tweets_db,'select * from tweet order by user'))
+
 	print(tweets_db)
 	print(pos_neg_table)
 	print(sides_table)
