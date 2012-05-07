@@ -1,4 +1,4 @@
-import sys, sqlite3
+import sys, sqlite3, re
 
 class Database:
 	def __init__(self,db,table, column):
@@ -74,6 +74,15 @@ class Tweet:
 		print(self.username)
 		print(self.text)
 		print
+
+	def contains(word):
+		if re.search(word,self.text) is not None:
+			#print ('Found')
+			return True
+		else:
+			#print ('Not Found')
+			return False
+
 
 
 def create_tweet_array(tmp):
