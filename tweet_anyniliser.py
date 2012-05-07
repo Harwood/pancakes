@@ -24,7 +24,7 @@ def arg_handling():
 
 
 # Checks if word exists
-def contains_word(text,word,case_sensitive):
+def contains_word(text,word):
     if re.search(word,text) is not None:
         print ('Found')
         return True
@@ -47,6 +47,12 @@ def main():
 	
 	for t in tweets:
 		t.print_tweet()
+		if t.contains('RT'):
+			print('Has RT')
+		if t.contains('#Virgos'):
+			print('Has #Virgos')
+		print
+		
 
 	print(tweets_db)
 	print(pos_neg_table)
