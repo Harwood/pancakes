@@ -57,6 +57,7 @@ class Database:
 
 class Tweet:
 	def __init__(self,tweet):
+		print(len(tweet))
 		self.id = tweet[0]
 		self.name = tweet[1]
 		self.username = tweet[2]
@@ -68,21 +69,23 @@ class Tweet:
 
 	def get_info(self):
 		return self.id, self.name, self.username, self.text
+	
 	def print_tweet(self):
 		print(self.id)
 		print(self.name)
 		print(self.username)
 		print(self.text)
-		print
 
-	def contains(word):
+	def contains(self,word):
 		if re.search(word,self.text) is not None:
 			#print ('Found')
 			return True
 		else:
 			#print ('Not Found')
 			return False
-
+class Word:
+	def __init__(self,word):
+		print
 
 
 def create_tweet_array(tmp):
