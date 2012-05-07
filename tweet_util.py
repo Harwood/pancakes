@@ -68,6 +68,13 @@ class Tweet:
 
 	def get_info(self):
 		return self.id, self.name, self.username, self.text
+	def print_tweet(self):
+		print(self.id)
+		print(self.name)
+		print(self.username)
+		print(self.text)
+		print
+
 
 def create_tweet_array(tmp):
 	array = []

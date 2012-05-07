@@ -42,9 +42,11 @@ def test_db(db):
 def main():
 	tweets_db, pos_neg_table, sides_table = arg_handling()
 
-	tweet_util.create_tweet_array(tweet_util.get_results(tweets_db,'select * from tweet order by user'))	
-	tweet_util.print_results(tweet_util.get_results(tweets_db,'select * from tweet order by user'))
-
+	tweets = tweet_util.create_tweet_array(tweet_util.get_results(tweets_db,'select * from tweet order by user'))	
+#	tweet_util.print_results(tweet_util.get_results(tweets_db,'select * from tweet order by user'))
+	
+	for t in tweets:
+		t.print_tweet()
 
 	print(tweets_db)
 	print(pos_neg_table)
