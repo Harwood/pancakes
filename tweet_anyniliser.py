@@ -92,7 +92,6 @@ def main():
 	dem_rep_words = get_array_of_words(tweets_db,'select * from dem_rep_words order by word')
 	negation_words = get_array_of_words(tweets_db,'select * from negation_words order by word')
 	
-#	print(info)
 	
 	for t in tweets:
 		#t.print_tweet()
@@ -105,10 +104,10 @@ def main():
 		calc_score(t,pos_neg_words)
 		calc_score(t,negation_words)
 		#if t.dem_score != 0 or t.rep_score != 0:
-#		if info not None:
-		t.print_tweet_info()
-#		else
-#			t.print_tweet()
+		if info not None:
+			t.print_tweet_info()
+		else
+			t.print_tweet()
 		
 	
 #	print('Positive & Negitive Words:')
