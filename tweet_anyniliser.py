@@ -52,18 +52,24 @@ def calc_score(tweet,words):
 
 	for w in words:
 		if tweet.contains(w.text):
-			if rep.search(w.side.encode('unicode_escape'),re.I):
-				print('Republican: '+str(w.text))
-				tweet.inc_rep_score(w.value)
-			if dem.search(w.side.encode('unicode_escape'),re.I):
-				print('Democrat: '+str(w.text))
-				tweet.inc_dem_score(w.value)
-			if pos.search(w.side.encode('unicode_escape'),re.I):
-				print('Positive: '+str(w.text))
-				tweet.inc_pos_score(1)
-			if neg.search(w.side.encode('unicode_escape'),re.I):
-				print('Negitive: '+str(w.text))
-				tweet.inc_neg_score(1)
+			#Negation list
+			if w.side is not '':
+				if rep.search(w.side.encode('unicode_escape'),re.I):
+					print('Republican: '+str(w.text))
+					tweet.inc_rep_score(w.value)
+				if dem.search(w.side.encode('unicode_escape'),re.I):
+					print('Democrat: '+str(w.text))
+					tweet.inc_dem_score(w.value)
+				if pos.search(w.side.encode('unicode_escape'),re.I):
+					print('Positive: '+str(w.text))
+					tweet.inc_pos_score(1)
+				if neg.search(w.side.encode('unicode_escape'),re.I):
+					print('Negitive: '+str(w.text))
+					tweet.inc_neg_score(1)
+			else:
+				print('Negations: '+str(w.text))
+				tweet.inc_necgation_score(1)
+
 
 
 		#tweet.print_tweet()
@@ -94,6 +100,7 @@ def main():
 		#print
 		calc_score(t,dem_rep_words)
 		calc_score(t,pos_neg_words)
+		calc_score(t,negation_words)
 		#if t.dem_score != 0 or t.rep_score != 0:
 		t.print_tweet()
 

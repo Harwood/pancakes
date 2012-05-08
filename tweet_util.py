@@ -67,6 +67,7 @@ class Tweet:
 		self.rep_score = 0
 		self.pos_score = 0
 		self.neg_score = 0
+		self.negation_score = 0
 
 	def get_original_tweet_info(self):
 		return self.tweet
@@ -83,11 +84,12 @@ class Tweet:
 		print('Republican Score: '+str(self.rep_score))
 		print('Positive Score: '+str(self.pos_score))
 		print('Negitive Score: '+str(self.neg_score))
+		print('Negation Score: '+str(self.negation_score))
 		print
 
 	def contains(self,word):
-		term = re.compile('[\\W\\b]#?'+word+'s?[\\W\\b]');
-		if term.search(self.text,re.I) is not None:
+		term = re.compile("(^|[\\W\\b])#?"+word+"s?(:|!|$|[\\W\\b])",re.IGNORECASE);
+		if term.search(self.text) is not None:
 		#if re.search(,self.text,re.I) is not None:
 			#print ('Found')
 			return True
@@ -107,6 +109,10 @@ class Tweet:
 	def inc_neg_score(self,value):
 		self.neg_score += value
 		return self.neg_score
+	def inc_necgation_score(self,value):
+		self.negation_score += value
+		return self.negation_score
+
 
 class Word:
 	
