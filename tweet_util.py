@@ -57,7 +57,6 @@ class Database:
 
 class Tweet:
 	def __init__(self,tweet):
-		print(len(tweet))
 		self.id = tweet[0]
 		self.name = tweet[1]
 		self.username = tweet[2]
@@ -84,9 +83,39 @@ class Tweet:
 			#print ('Not Found')
 			return False
 class Word:
+	
 	def __init__(self,word):
-		print
+		self.word = word
 
+		length = len(self.word)
+		if length is 3:
+			self.text = self.word[0]
+			self.side = self.word[1]
+			self.value = self.word[2]
+		if length is 2:
+			self.text = self.word[0]
+			self.side = self.word[1]
+			self.value = ''
+		if length is 1:
+			self.text = self.word[0]
+			self.side = ''
+			self.value = ''
+
+	def text(self):
+		return self.text
+	def side(self):
+		return self.side
+	def value(self):
+		return self.value
+	def print_word(self):
+		print(self.text+'|'+self.side+'|'+str(self.value))
+
+
+def create_word_array(tmp):
+	array = []
+	for t in tmp:
+		array.append(Word(t))
+	return array
 
 def create_tweet_array(tmp):
 	array = []

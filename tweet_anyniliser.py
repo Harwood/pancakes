@@ -38,12 +38,21 @@ def test_db(db):
 
 
 
+def get_array_of_tweets(db,query):
+	return tweet_util.create_tweet_array(tweet_util.get_results(db,query)) 
+
+def get_array_of_words(db,query):
+	return tweet_util.create_word_array(tweet_util.get_results(db,query)) 
+
 # Main driver
 def main():
 	tweets_db, pos_neg_table, sides_table = arg_handling()
 
-	tweets = tweet_util.create_tweet_array(tweet_util.get_results(tweets_db,'select * from tweet order by user'))	
-#	tweet_util.print_results(tweet_util.get_results(tweets_db,'select * from tweet order by user'))
+	tweets = get_array_of_tweets(tweets_db,'select * from tweet order by user')
+	pos_neg_words = get_array_of_words(tweets_db,'select * from '+pos_neg_table+' order by word')
+	dem_rep_words = get_array_of_words(tweets_db,'select * from '+sides_table+' order by word')
+	negation_words = get_array_of_words(tweets_db,'select * from negation_words order by word')
+
 	
 	for t in tweets:
 		t.print_tweet()
@@ -53,10 +62,21 @@ def main():
 			print('Has #Virgos')
 		print
 		
+	print('Positive & Negitive Words:')
+	for w in pos_neg_words:
+		w.print_word()
 
-	print(tweets_db)
-	print(pos_neg_table)
-	print(sides_table)
+	print('Democrat & Republican Words:')
+	for w in dem_rep_words:
+		w.print_word()
+
+	print('Negation Words:')
+	for w in negation_words:
+		w.print_word()
+		
+	#print(tweets_db)
+	#print(pos_neg_table)
+	#print(sides_table)
 	#print(db_connect(tweets_db,pos_neg_table,'word'))
 
 
