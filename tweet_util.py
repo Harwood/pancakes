@@ -61,6 +61,7 @@ class Tweet:
 		self.name = tweet[1]
 		self.username = tweet[2]
 		self.text = tweet[3]
+		self.given = tweet[4]
 		self.tweet = tweet
 		
 		self.dem_score = 0
@@ -68,6 +69,8 @@ class Tweet:
 		self.pos_score = 0
 		self.neg_score = 0
 		self.negation_score = 0
+		self.scaler = 1
+		self.final_score = 0
 
 	def get_original_tweet_info(self):
 		return self.tweet
@@ -85,7 +88,10 @@ class Tweet:
 		print('Positive Score: '+str(self.pos_score))
 		print('Negitive Score: '+str(self.neg_score))
 		print('Negation Score: '+str(self.negation_score))
+		print('Final Score: '+str(self.final_score))
 		print
+	def print_tweet_info(self):
+		print(str(self.dem_score-self.rep_score)+','+str(self.scaler*(self.pos_score-self.neg_score))+','+str(self.given))
 
 	def contains(self,word):
 		term = re.compile("(^|[\\W\\b])#?"+word+"s?(:|!|$|[\\W\\b])",re.IGNORECASE);
@@ -112,6 +118,14 @@ class Tweet:
 	def inc_necgation_score(self,value):
 		self.negation_score += value
 		return self.negation_score
+	def __negate(self):
+		self.negated = True
+
+	def score_tweet(self):
+		if (self.negation_score > 0):
+			self.scaler = -1
+
+		self.final_score = (self.dem_score-self.rep_score) * (self.pos_score-self.neg_score) * (self.scaler)
 
 
 class Word:

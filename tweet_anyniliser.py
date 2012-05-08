@@ -10,6 +10,7 @@ def arg_handling():
 		parser.add_argument('-t',nargs=1, dest='tweets_db', type=str, default=[''], required=True, help='sqlite database storing tweets')
 		parser.add_argument('-p',nargs=1, dest='pos_neg_table', type=str, default=[''], required=True, help='table that holds positive and negitive words')
 		parser.add_argument('-s',nargs=1, dest='sides_table', type=str, default=[''], required=True, help='table that holds words relating to each side')
+		parser.add_argument('-i', action='count', dest='info')
 
 
 	except Exception as err:
@@ -19,7 +20,7 @@ def arg_handling():
 
 	args = parser.parse_args()
 
-	return args.tweets_db[0],  args.pos_neg_table[0], args.sides_table[0]
+	return args.tweets_db[0], args.info, args.pos_neg_table[0], args.sides_table[0]
 
 
 
@@ -55,20 +56,21 @@ def calc_score(tweet,words):
 			#Negation list
 			if w.side is not '':
 				if rep.search(w.side.encode('unicode_escape'),re.I):
-					print('Republican: '+str(w.text))
+					#print('Republican: '+str(w.text))
 					tweet.inc_rep_score(w.value)
 				if dem.search(w.side.encode('unicode_escape'),re.I):
-					print('Democrat: '+str(w.text))
+					#print('Democrat: '+str(w.text))
 					tweet.inc_dem_score(w.value)
 				if pos.search(w.side.encode('unicode_escape'),re.I):
-					print('Positive: '+str(w.text))
+					#print('Positive: '+str(w.text))
 					tweet.inc_pos_score(1)
 				if neg.search(w.side.encode('unicode_escape'),re.I):
-					print('Negitive: '+str(w.text))
+					#print('Negitive: '+str(w.text))
 					tweet.inc_neg_score(1)
 			else:
-				print('Negations: '+str(w.text))
+				#print('Negations: '+str(w.text))
 				tweet.inc_necgation_score(1)
+	tweet.score_tweet()
 
 
 
@@ -83,13 +85,14 @@ def calc_score(tweet,words):
 
 # Main driver
 def main():
-	tweets_db, pos_neg_table, sides_table = arg_handling()
+	tweets_db, info, pos_neg_table, sides_table = arg_handling()
 
 	tweets = get_array_of_tweets(tweets_db,'select * from tweet order by user')
 	pos_neg_words = get_array_of_words(tweets_db,'select * from pos_neg_words order by word')
 	dem_rep_words = get_array_of_words(tweets_db,'select * from dem_rep_words order by word')
 	negation_words = get_array_of_words(tweets_db,'select * from negation_words order by word')
-
+	
+#	print(info)
 	
 	for t in tweets:
 		#t.print_tweet()
@@ -102,8 +105,11 @@ def main():
 		calc_score(t,pos_neg_words)
 		calc_score(t,negation_words)
 		#if t.dem_score != 0 or t.rep_score != 0:
-		t.print_tweet()
-
+#		if info not None:
+		t.print_tweet_info()
+#		else
+#			t.print_tweet()
+		
 	
 #	print('Positive & Negitive Words:')
 #	for w in pos_neg_words:
