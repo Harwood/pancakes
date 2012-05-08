@@ -8,8 +8,6 @@ def arg_handling():
 	parser = argparse.ArgumentParser(description='Tweet analyser')
 	try:
 		parser.add_argument('-t',nargs=1, dest='tweets_db', type=str, default=[''], required=True, help='sqlite database storing tweets')
-		parser.add_argument('-p',nargs=1, dest='pos_neg_table', type=str, default=[''], required=True, help='table that holds positive and negitive words')
-		parser.add_argument('-s',nargs=1, dest='sides_table', type=str, default=[''], required=True, help='table that holds words relating to each side')
 		parser.add_argument('-i', action='count', dest='info')
 
 
@@ -20,7 +18,7 @@ def arg_handling():
 
 	args = parser.parse_args()
 
-	return args.tweets_db[0], args.info, args.pos_neg_table[0], args.sides_table[0]
+	return args.tweets_db[0], args.info
 
 
 
@@ -53,7 +51,6 @@ def calc_score(tweet,words):
 
 	for w in words:
 		if tweet.contains(w.text):
-			#Negation list
 			if w.side is not '':
 				if rep.search(w.side.encode('unicode_escape'),re.I):
 					#print('Republican: '+str(w.text))
@@ -67,6 +64,7 @@ def calc_score(tweet,words):
 				if neg.search(w.side.encode('unicode_escape'),re.I):
 					#print('Negitive: '+str(w.text))
 					tweet.inc_neg_score(1)
+			#Negation list
 			else:
 				#print('Negations: '+str(w.text))
 				tweet.inc_necgation_score(1)
@@ -74,18 +72,10 @@ def calc_score(tweet,words):
 
 
 
-		#tweet.print_tweet()
-	#elif side is 'dem':
-	#	for w in words:
-	#		if not term.search(w.side.encode('unicode_escape'),re.I) and tweet.contains(w.text):
-	#			print(str(w.text))
-	#			tweet.inc_dem_score(w.value)
-	#	#tweet.print_tweet()
-
 
 # Main driver
 def main():
-	tweets_db, info, pos_neg_table, sides_table = arg_handling()
+	tweets_db, info = arg_handling()
 
 	tweets = get_array_of_tweets(tweets_db,'select * from tweet order by user')
 	pos_neg_words = get_array_of_words(tweets_db,'select * from pos_neg_words order by word')
@@ -94,39 +84,14 @@ def main():
 	
 	
 	for t in tweets:
-		#t.print_tweet()
-		#if t.contains('RT'):
-		#	print('Has RT')
-		#if t.contains('#Virgos'):
-		#	print('Has #Virgos')
-		#print
 		calc_score(t,dem_rep_words)
 		calc_score(t,pos_neg_words)
 		calc_score(t,negation_words)
-		#if t.dem_score != 0 or t.rep_score != 0:
-		if info not None:
+		if info is not None:
 			t.print_tweet_info()
-		else
+		else:
 			t.print_tweet()
 		
 	
-#	print('Positive & Negitive Words:')
-#	for w in pos_neg_words:
-#		w.print_word()
-
-#	print('Democrat & Republican Words:')
-#	for w in dem_rep_words:
-#		w.print_word()
-
-#	print('Negation Words:')
-#	for w in negation_words:
-#		w.print_word()
-		
-	#print(tweets_db)
-	#print(pos_neg_table)
-	#print(sides_table)
-	#print(db_connect(tweets_db,pos_neg_table,'word'))
-
-
 if __name__ == "__main__":
 	main()

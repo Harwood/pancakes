@@ -1,59 +1,6 @@
 import sys, sqlite3, re
 
-class Database:
-	def __init__(self,db,table, column):
-		self.conn , self.curr = self.__connect_db(db)
-		self.list = self.__select_db(self.curr,table,column)
-		self.__disconnect_db(self.conn,self.curr)
 
-	def get_list():
-		return self.list
-
-	# Creates connection and cursor for sqlite db
-	def __connect_db(self,db):
-		try:
-			conn = sqlite3.connect(db)
-			curr = conn.cursor()
-
-		except Exception as err:
-			print(str(err))
-			sys.exit()
-
-		return conn, curr
-
-	# Close connection and cursur for sqlite db
-	def __disconnect_db(self,conn,curr):
-		try:
-			curr.close()
-			conn.close()
-		except Exception as err:
-			print(str(err))
-	# Returns tables
-	def __select_db(self,curr,table,col):
-		try:
-			tmp = curr.execute('.tables')
-
-			rows=[]
-			for t in tmp:
-				rows.append(t[0])
-		except Exception as err:
-			print(str(err))
-			sys.exit()
-
-		return rows
-	# Returns list of results from select query
-	def __select_db(self,curr,table,col):
-		try:
-			tmp = curr.execute('select * from '+table+' order by '+col)
-
-			rows=[]
-			for t in tmp:
-				rows.append(t[0])
-		except Exception as err:
-			print(str(err))
-			sys.exit()
-
-		return rows
 
 class Tweet:
 	def __init__(self,tweet):
@@ -90,17 +37,26 @@ class Tweet:
 		print('Negation Score: '+str(self.negation_score))
 		print('Final Score: '+str(self.final_score))
 		print
+
 	def print_tweet_info(self):
-		print(str(self.dem_score-self.rep_score)+','+str(self.scaler*(self.pos_score-self.neg_score))+','+str(self.given))
+		x = self.dem_score-self.rep_score
+		x_not = 1
+		y = self.scaler*(self.pos_score-self.neg_score)
+		y_not = 1
+
+		if x != 0.0:
+			x_not = abs(x)
+		if y != 0:
+			y_not = abs(y)
+
+		print(str(x/x_not)+','+str(y/y_not)+','+str(self.given))
 
 	def contains(self,word):
 		term = re.compile("(^|[\\W\\b])#?"+word+"s?(:|!|$|[\\W\\b])",re.IGNORECASE);
+		
 		if term.search(self.text) is not None:
-		#if re.search(,self.text,re.I) is not None:
-			#print ('Found')
 			return True
 		else:
-			#print ('Not Found')
 			return False
 
 	def inc_dem_score(self,value):
@@ -198,7 +154,6 @@ def db_insert(db,table, tweets):
 			#print(t)
 			try:
 				query = 'insert into '+unicode(table)+' values("'+unicode(str(i))+'","'+unicode(str(t[0]))+'","'+unicode(str(t[0]))+'","'+str(t[1])+'","'+unicode(str(t[2]))+'","")'
-				#query = "insert into "+unicode(table)+" values('"+unicode(str(i))+"','"+unicode(str(t[0]))+"','"+unicode(str(t[0]))+"','"+unicode(str(t[1]))+"','"+unicode(str(t[2]))+"','')"
 				curr.execute(query)
 				conn.commit()
 			except Exception as err:
