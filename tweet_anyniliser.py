@@ -44,21 +44,35 @@ def get_array_of_tweets(db,query):
 def get_array_of_words(db,query):
 	return tweet_util.create_word_array(tweet_util.get_results(db,query)) 
 
-def calc_score(tweet,side,words):
-	term = re.compile('p');
+def calc_score(tweet,words):
+	rep = re.compile('u')
+	dem = re.compile('m')
+	pos = re.compile('s')
+	neg = re.compile('g')
 
-	if side is 'rep':
-		for w in words:
-			if term.search(w.side.encode('unicode_escape'),re.I) and tweet.contains(w.text):
+	for w in words:
+		if tweet.contains(w.text):
+			if rep.search(w.side.encode('unicode_escape'),re.I):
 				print(str(w.text)+' | '+w.side.encode('unicode_escape'))
 				tweet.inc_rep_score(w.value)
-		#tweet.print_tweet()
-	elif side is 'dem':
-		for w in words:
-			if not term.search(w.side.encode('unicode_escape'),re.I) and tweet.contains(w.text):
+			if dem.search(w.side.encode('unicode_escape'),re.I):
 				print(str(w.text))
 				tweet.inc_dem_score(w.value)
+			if pos.search(w.side.encode('unicode_escape'),re.I):
+				print(str(w.text))
+				tweet.inc_pos_score(1)
+			if neg.search(w.side.encode('unicode_escape'),re.I):
+				print(str(w.text))
+				tweet.inc_neg_score(1)
+
+
 		#tweet.print_tweet()
+	#elif side is 'dem':
+	#	for w in words:
+	#		if not term.search(w.side.encode('unicode_escape'),re.I) and tweet.contains(w.text):
+	#			print(str(w.text))
+	#			tweet.inc_dem_score(w.value)
+	#	#tweet.print_tweet()
 
 
 # Main driver
@@ -66,8 +80,8 @@ def main():
 	tweets_db, pos_neg_table, sides_table = arg_handling()
 
 	tweets = get_array_of_tweets(tweets_db,'select * from tweet order by user')
-	pos_neg_words = get_array_of_words(tweets_db,'select * from '+pos_neg_table+' order by word')
-	dem_rep_words = get_array_of_words(tweets_db,'select * from '+sides_table+' order by word')
+	pos_neg_words = get_array_of_words(tweets_db,'select * from pos_neg_words order by word')
+	dem_rep_words = get_array_of_words(tweets_db,'select * from dem_rep_words order by word')
 	negation_words = get_array_of_words(tweets_db,'select * from negation_words order by word')
 
 	
@@ -78,8 +92,8 @@ def main():
 		#if t.contains('#Virgos'):
 		#	print('Has #Virgos')
 		#print
-		calc_score(t,'rep',dem_rep_words)
-		calc_score(t,'dem',dem_rep_words)
+		calc_score(t,dem_rep_words)
+		calc_score(t,pos_neg_words)
 		#if t.dem_score != 0 or t.rep_score != 0:
 		t.print_tweet()
 

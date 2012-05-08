@@ -65,6 +65,8 @@ class Tweet:
 		
 		self.dem_score = 0
 		self.rep_score = 0
+		self.pos_score = 0
+		self.neg_score = 0
 
 	def get_original_tweet_info(self):
 		return self.tweet
@@ -73,15 +75,18 @@ class Tweet:
 		return self.id, self.name, self.username, self.text
 	
 	def print_tweet(self):
-		print(self.id)
-		print(self.name)
-		print(self.username)
+		#print(self.id)
+		#print(self.name)
+		#print(self.username)
 		print(self.text)
 		print('Democrate Score: '+str(self.dem_score))
 		print('Republican Score: '+str(self.rep_score))
+		print('Positive Score: '+str(self.pos_score))
+		print('Negitive Score: '+str(self.neg_score))
+		print
 
 	def contains(self,word):
-		term = re.compile('\\b'+word+'\\b');
+		term = re.compile('[\\W\\b]#?'+word+'s?[\\W\\b]');
 		if term.search(self.text,re.I) is not None:
 		#if re.search(,self.text,re.I) is not None:
 			#print ('Found')
@@ -96,6 +101,12 @@ class Tweet:
 	def inc_rep_score(self,value):
 		self.rep_score += value
 		return self.rep_score
+	def inc_neg_score(self,value):
+		self.pos_score += value
+		return self.pos_score
+	def inc_pos_score(self,value):
+		self.neg_score += value
+		return self.neg_score
 
 class Word:
 	
@@ -144,8 +155,9 @@ def print_results(results):
 		
 		tweet = Tweet(i)
 		id, name, username, text = tweet.get_info()
-		print(id)
-		print(name)
+		print
+		#print(id)
+		#print(name)
 		print(username)
 		print(text)
 		print
