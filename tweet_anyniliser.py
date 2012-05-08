@@ -44,6 +44,21 @@ def get_array_of_tweets(db,query):
 def get_array_of_words(db,query):
 	return tweet_util.create_word_array(tweet_util.get_results(db,query)) 
 
+def calc_score(tweet,side,words):
+	if side is 'rep':
+		for w in words:
+			if tweet.contains(w.text):
+				print(str(w.text))
+				tweet.inc_rep_score(w.value)
+		#tweet.print_tweet()
+	elif side is 'dem':
+		for w in words:
+			if tweet.contains(w.text):
+				print(str(w.text))
+				tweet.inc_dem_score(w.value)
+		#tweet.print_tweet()
+
+
 # Main driver
 def main():
 	tweets_db, pos_neg_table, sides_table = arg_handling()
@@ -55,24 +70,28 @@ def main():
 
 	
 	for t in tweets:
+		#t.print_tweet()
+		#if t.contains('RT'):
+		#	print('Has RT')
+		#if t.contains('#Virgos'):
+		#	print('Has #Virgos')
+		#print
+		calc_score(t,'rep',dem_rep_words)
+		calc_score(t,'dem',dem_rep_words)
 		t.print_tweet()
-		if t.contains('RT'):
-			print('Has RT')
-		if t.contains('#Virgos'):
-			print('Has #Virgos')
-		print
-		
-	print('Positive & Negitive Words:')
-	for w in pos_neg_words:
-		w.print_word()
 
-	print('Democrat & Republican Words:')
-	for w in dem_rep_words:
-		w.print_word()
+	
+#	print('Positive & Negitive Words:')
+#	for w in pos_neg_words:
+#		w.print_word()
 
-	print('Negation Words:')
-	for w in negation_words:
-		w.print_word()
+#	print('Democrat & Republican Words:')
+#	for w in dem_rep_words:
+#		w.print_word()
+
+#	print('Negation Words:')
+#	for w in negation_words:
+#		w.print_word()
 		
 	#print(tweets_db)
 	#print(pos_neg_table)

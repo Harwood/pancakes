@@ -62,6 +62,9 @@ class Tweet:
 		self.username = tweet[2]
 		self.text = tweet[3]
 		self.tweet = tweet
+		
+		self.dem_score = 0
+		self.rep_score = 0
 
 	def get_original_tweet_info(self):
 		return self.tweet
@@ -74,14 +77,26 @@ class Tweet:
 		print(self.name)
 		print(self.username)
 		print(self.text)
+		print('Democrate Score: '+str(self.dem_score))
+		print('Republican Score: '+str(self.rep_score))
 
 	def contains(self,word):
-		if re.search(word,self.text) is not None:
+		term = re.compile('\\b'+word+'\\b');
+		if term.search(self.text,re.I) is not None:
+		#if re.search(,self.text,re.I) is not None:
 			#print ('Found')
 			return True
 		else:
 			#print ('Not Found')
 			return False
+
+	def inc_dem_score(self,value):
+		self.dem_score += value
+		return self.dem_score
+	def inc_rep_score(self,value):
+		self.rep_score += value
+		return self.rep_score
+
 class Word:
 	
 	def __init__(self,word):
@@ -140,6 +155,16 @@ def db_connect(db,table,column):
 	data = tweet_util.Database(db,table,column)
 
 	return data.get_list()
+
+def db_insert(db,table, tweets):
+	conn = sqlite3.connect(db)
+	curr = conn.cursor()
+	
+	i = 0
+	for t in tweets:
+		curr.execute("insert into tweet values("+i+","+t[0]+","+t[0]+","+t[1]+","+t[2]+",'')")
+	curr.close()
+	conn.close()
 
 def get_results(db,query):
 	conn = sqlite3.connect(db)
