@@ -157,14 +157,30 @@ def db_connect(db,table,column):
 	return data.get_list()
 
 def db_insert(db,table, tweets):
-	conn = sqlite3.connect(db)
-	curr = conn.cursor()
+	try:
+		conn = sqlite3.connect(db)
+		curr = conn.cursor()
 	
-	i = 0
-	for t in tweets:
-		curr.execute("insert into tweet values("+i+","+t[0]+","+t[0]+","+t[1]+","+t[2]+",'')")
-	curr.close()
-	conn.close()
+		i = 0
+		for t in tweets:
+			#print(t)
+			try:
+				query = 'insert into '+unicode(table)+' values("'+unicode(str(i))+'","'+unicode(str(t[0]))+'","'+unicode(str(t[0]))+'","'+str(t[1])+'","'+unicode(str(t[2]))+'","")'
+				#query = "insert into "+unicode(table)+" values('"+unicode(str(i))+"','"+unicode(str(t[0]))+"','"+unicode(str(t[0]))+"','"+unicode(str(t[1]))+"','"+unicode(str(t[2]))+"','')"
+				curr.execute(query)
+				conn.commit()
+			except Exception as err:
+				print("did not add tweet number "+str(i))
+			i += 1
+
+		curr.close()
+		conn.close()
+
+	except Exception as err:
+		print("Error inserting: ")
+		print(str(err))
+		sys.exit()
+
 
 def get_results(db,query):
 	conn = sqlite3.connect(db)

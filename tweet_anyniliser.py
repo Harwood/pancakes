@@ -45,15 +45,17 @@ def get_array_of_words(db,query):
 	return tweet_util.create_word_array(tweet_util.get_results(db,query)) 
 
 def calc_score(tweet,side,words):
+	term = re.compile('p');
+
 	if side is 'rep':
 		for w in words:
-			if tweet.contains(w.text):
-				print(str(w.text))
+			if term.search(w.side.encode('unicode_escape'),re.I) and tweet.contains(w.text):
+				print(str(w.text)+' | '+w.side.encode('unicode_escape'))
 				tweet.inc_rep_score(w.value)
 		#tweet.print_tweet()
 	elif side is 'dem':
 		for w in words:
-			if tweet.contains(w.text):
+			if not term.search(w.side.encode('unicode_escape'),re.I) and tweet.contains(w.text):
 				print(str(w.text))
 				tweet.inc_dem_score(w.value)
 		#tweet.print_tweet()
@@ -78,6 +80,7 @@ def main():
 		#print
 		calc_score(t,'rep',dem_rep_words)
 		calc_score(t,'dem',dem_rep_words)
+		#if t.dem_score != 0 or t.rep_score != 0:
 		t.print_tweet()
 
 	
