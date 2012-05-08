@@ -49,7 +49,7 @@ class Tweet:
 		if y != 0:
 			y_not = abs(y)
 
-		print(str(x/x_not)+','+str(y/y_not)+','+str(self.given))
+		print(str(int(x/x_not))+','+str(int(y/y_not))+','+str(self.given))
 
 	def contains(self,word):
 		term = re.compile("(^|[\\W\\b])#?"+word+"s?(:|!|$|[\\W\\b])",re.IGNORECASE);
