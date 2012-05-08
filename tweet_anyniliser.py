@@ -53,16 +53,16 @@ def calc_score(tweet,words):
 	for w in words:
 		if tweet.contains(w.text):
 			if rep.search(w.side.encode('unicode_escape'),re.I):
-				print(str(w.text)+' | '+w.side.encode('unicode_escape'))
+				print('Republican: '+str(w.text))
 				tweet.inc_rep_score(w.value)
 			if dem.search(w.side.encode('unicode_escape'),re.I):
-				print(str(w.text))
+				print('Democrat: '+str(w.text))
 				tweet.inc_dem_score(w.value)
 			if pos.search(w.side.encode('unicode_escape'),re.I):
-				print(str(w.text))
+				print('Positive: '+str(w.text))
 				tweet.inc_pos_score(1)
 			if neg.search(w.side.encode('unicode_escape'),re.I):
-				print(str(w.text))
+				print('Negitive: '+str(w.text))
 				tweet.inc_neg_score(1)
 
 
