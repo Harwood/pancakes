@@ -101,10 +101,10 @@ class Tweet:
 	def inc_rep_score(self,value):
 		self.rep_score += value
 		return self.rep_score
-	def inc_neg_score(self,value):
+	def inc_pos_score(self,value):
 		self.pos_score += value
 		return self.pos_score
-	def inc_pos_score(self,value):
+	def inc_neg_score(self,value):
 		self.neg_score += value
 		return self.neg_score
 
