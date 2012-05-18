@@ -75,6 +75,10 @@ def calc_score(tweet,words):
 
 # Main driver
 def main():
+	dem_count = 0
+	rep_count = 0
+	other_count = 0
+
 	tweets_db, info = arg_handling()
 
 	tweets = get_array_of_tweets(tweets_db,'select * from tweet order by user')
@@ -91,6 +95,25 @@ def main():
 			t.print_tweet_info()
 		else:
 			t.print_tweet()
+		
+			if t.final_score > 0:
+				dem_count += 1
+			elif t.final_score < 0:
+				rep_count += 1
+			else:
+				other_count += 1
+
+	if info is None:
+		print
+		print
+		print('Democrat Count: '+str(dem_count))
+		print('Republican Count: '+str(rep_count))
+		print('Not Identfied Count: '+str(other_count))
+
+
+		
+
+	
 		
 	
 if __name__ == "__main__":

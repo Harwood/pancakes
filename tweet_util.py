@@ -36,6 +36,12 @@ class Tweet:
 		print('Negitive Score: '+str(self.neg_score))
 		print('Negation Score: '+str(self.negation_score))
 		print('Final Score: '+str(self.final_score))
+		if self.final_score > 0:
+			print('Identified as Democrat')
+		elif self.final_score < 0:
+			print('Identified as Republican')
+		else:
+			print('Not Identified')
 		print
 
 	def print_tweet_info(self):
@@ -44,12 +50,14 @@ class Tweet:
 		y = self.scaler*(self.pos_score-self.neg_score)
 		y_not = 1
 
-		if x != 0.0:
-			x_not = abs(x)
-		if y != 0:
-			y_not = abs(y)
+		if x != 0.0 or y != 0:
+			if x != 0.0:
+				x_not = abs(x)
+			if y != 0:
+				y_not = abs(y)
+		
+			print(str(int(x/x_not))+','+str(int(y/y_not))+','+str(self.given))
 
-		print(str(int(x/x_not))+','+str(int(y/y_not))+','+str(self.given))
 
 	def contains(self,word):
 		term = re.compile("(^|[\\W\\b])#?"+word+"s?(:|!|$|[\\W\\b])",re.IGNORECASE);
