@@ -1,0 +1,10 @@
+Requires:
+	Python 2.7
+	sqlite3
+	argparse
+
+Format:
+	python2.7 tweet_anyniliser.py -t tweets_db [-i]
+
+	-t	sqlite database
+	-i	to get format for WEKA analysis 

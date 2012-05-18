@@ -8,7 +8,7 @@ def arg_handling():
 	parser = argparse.ArgumentParser(description='Tweet analyser')
 	try:
 		parser.add_argument('-t',nargs=1, dest='tweets_db', type=str, default=[''], required=True, help='sqlite database storing tweets')
-		parser.add_argument('-i', action='count', dest='info')
+		parser.add_argument('-i', action='count', dest='format for WEKA analysis')
 
 
 	except Exception as err:
