@@ -1,3 +1,1 @@
-pancakes
-========\
-test
+Project code from UMBC class project
